@@ -14,7 +14,7 @@ export default function AuthForm({ isLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = isLogin ? "http://localhost:3003/api/auth/login" : "http://localhost:3003/api/auth/register";
+    const url = isLogin ? "https://reveo-ai-backend.vercel.app/api/auth/login" : "https://reveo-ai-backend.vercel.app/api/auth/register";
     try {
       const res = await axios.post(url, { email, password });
       localStorage.setItem("token", res.data.token);

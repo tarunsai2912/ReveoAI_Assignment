@@ -12,7 +12,7 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3003/api/sheet/sheet-data", {
+        const res = await axios.get("https://reveo-ai-backend.vercel.app/api/sheet/sheet-data", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSheetData(res.data);
