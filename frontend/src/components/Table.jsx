@@ -1,0 +1,71 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export default function Table({ data }) {
+  const [columns, setColumns] = useState([]);
+  const [newColumnName, setNewColumnName] = useState("");
+  const [newColumnType, setNewColumnType] = useState("text");
+
+  const addColumn = () => {
+    if (!newColumnName) return;
+    const newColumn = { name: newColumnName, type: newColumnType };
+    setColumns([...columns, newColumn]);
+    setNewColumnName("");
+    setNewColumnType("text");
+  };
+
+  return (
+    <div>
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold mb-4">Add New Column</h2>
+        <div className="flex gap-4">
+          <Input
+            type="text"
+            placeholder="Column Name"
+            value={newColumnName}
+            onChange={(e) => setNewColumnName(e.target.value)}
+            className="w-48"
+          />
+          <select
+            value={newColumnType}
+            onChange={(e) => setNewColumnType(e.target.value)}
+            className="p-2 border rounded cursor-pointer"
+          >
+            <option value="text">Text</option>
+            <option value="date">Date</option>
+          </select>
+          <Button onClick={addColumn} className="bg-green-600 hover:bg-green-700 cursor-pointer">
+            Add Column
+          </Button>
+        </div>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full bg-white rounded-lg shadow">
+          <thead>
+            <tr className="bg-gray-200">
+              {columns.map((col, index) => (
+                <th key={index} className="p-3 text-left">
+                  {col.name}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, rowIndex) => (
+              <tr key={rowIndex} className="border-b">
+                {columns.map((col, colIndex) => (
+                  <td key={colIndex} className="p-3">
+                    {row[colIndex]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
