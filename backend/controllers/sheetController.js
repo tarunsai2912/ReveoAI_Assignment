@@ -1,5 +1,9 @@
 const { google } = require("googleapis");
 const Column = require("../models/Column");
+const dotenv = require("dotenv");
+const path = require("path"); 
+
+dotenv.config();
 
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
@@ -8,7 +12,7 @@ const SHEET_NAME = process.env.SHEET_NAME;
 const getSheetData = async (req, res) => {
   try {
     const auth = new google.auth.GoogleAuth({
-      keyFile: "credentials.json",
+      keyFile: path.resolve(__dirname, "../credentials.json"),
       scopes: SCOPES,
     });
 
@@ -20,6 +24,7 @@ const getSheetData = async (req, res) => {
 
     res.json(response.data.values);
   } catch (err) {
+    console.error(err)
     res.status(500).json({ message: "Server error" });
   }
 };

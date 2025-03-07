@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
   const router = useRouter();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    toast.success('User got loggedout')
     router.push("/login");
   };
 

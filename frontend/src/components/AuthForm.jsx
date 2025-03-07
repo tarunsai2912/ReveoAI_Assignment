@@ -6,11 +6,14 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function AuthForm({ isLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [show, setShow] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,8 +21,10 @@ export default function AuthForm({ isLogin }) {
     try {
       const res = await axios.post(url, { email, password });
       localStorage.setItem("token", res.data.token);
+      isLogin ? toast.success("User got loggedin") : toast.success("User got registerd")
       router.push("/dashboard");
     } catch (err) {
+      isLogin ? toast.error("Error in logging") : toast.error("Error in registering")
       console.error(err);
     }
   };
@@ -39,14 +44,14 @@ export default function AuthForm({ isLogin }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="mb-4 border border-black text-gray-600"
+          required
         />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mb-6 border border-black text-gray-600"
-        />
+        <div className="relative">
+          <Input type={show ? "text" : "password"} name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="mb-6 border border-black text-gray-600" required />
+          <div className="absolute right-3 top-1 cursor-pointer" onClick={() => setShow(!show)}>
+            {show ? <EyeOff /> : <Eye />}
+          </div>
+        </div>
         <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 transition-transform duration-300 hover:scale-110 cursor-pointer">
           {isLogin ? "Login" : "Register"}
         </Button>
