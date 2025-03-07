@@ -12,19 +12,10 @@ export default function Table({ data }) {
 
   const addColumn = async () => {
     if (!newColumnName) return;
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post("https://reveo-ai-backend.vercel.app/api/sheet/add-column", { name: newColumnName, type: newColumnType }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setColumns([...columns, res.data.columns]);
-      setNewColumnName("");
-      setNewColumnType("text");
-      toast.success('Column got added')
-    } catch (err) {
-      console.error(err);
-      toast.error('Error in column addition')
-    }
+    const newColumn = { name: newColumnName, type: newColumnType }
+    setColumns([...columns, newColumn]);
+    setNewColumnName("");
+    setNewColumnType("text");
   };
 
   return (

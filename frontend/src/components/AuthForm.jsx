@@ -14,18 +14,22 @@ export default function AuthForm({ isLogin }) {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isLogin ? "https://reveo-ai-backend.vercel.app/api/auth/login" : "https://reveo-ai-backend.vercel.app/api/auth/register";
     try {
+      setLoading(true)
       const res = await axios.post(url, { email, password });
       localStorage.setItem("token", res.data.token);
       isLogin ? toast.success("User got loggedin") : toast.success("User got registerd")
       router.push("/dashboard");
+      setLoading(false)
     } catch (err) {
       isLogin ? toast.error("Error in logging") : toast.error("Error in registering")
       console.error(err);
+      setLoading(false)
     }
   };
 
@@ -53,7 +57,7 @@ export default function AuthForm({ isLogin }) {
           </div>
         </div>
         <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 transition-transform duration-300 hover:scale-110 cursor-pointer">
-          {isLogin ? "Login" : "Register"}
+          {isLogin ? (loading ? 'Logging...' : "Login") : (loading ? 'Registering...' : "Register")}
         </Button>
         <p className="mt-4 text-center text-sm text-gray-600">
           {isLogin ? "Don't have an account? " : "Already have an account? "}
